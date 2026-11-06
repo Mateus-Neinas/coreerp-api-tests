@@ -1,0 +1,13 @@
+{
+  "name": "coreerp-api-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "smoke": "node src/runCollection.js collections/coreerp-smoke.json"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
