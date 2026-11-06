@@ -1,0 +1,88 @@
+{
+  "name": "CoreERP API smoke flow",
+  "baseUrl": "http://localhost:3000",
+  "steps": [
+    {
+      "name": "API health",
+      "method": "GET",
+      "path": "/health",
+      "expect": {
+        "status": 200,
+        "json": {
+          "status": "ok",
+          "service": "coreerp-api"
+        }
+      }
+    },
+    {
+      "name": "Create customer",
+      "method": "POST",
+      "path": "/customers",
+      "body": {
+        "name": "Acme Demo",
+        "email": "qa@example.test"
+      },
+      "expect": {
+        "status": 201,
+        "json": {
+          "name": "Acme Demo"
+        }
+      },
+      "capture": {
+        "customerId": "data.id"
+      }
+    },
+    {
+      "name": "Create product",
+      "method": "POST",
+      "path": "/products",
+      "body": {
+        "name": "Starter item",
+        "priceCents": 4590
+      },
+      "expect": {
+        "status": 201,
+        "json": {
+          "name": "Starter item"
+        }
+      },
+      "capture": {
+        "productId": "data.id"
+      }
+    },
+    {
+      "name": "Create order",
+      "method": "POST",
+      "path": "/orders",
+      "body": {
+        "customerId": "{{customerId}}",
+        "items": [
+          {
+            "productId": "{{productId}}",
+            "quantity": 2
+          }
+        ]
+      },
+      "expect": {
+        "status": 201,
+        "json": {
+          "status": "created"
+        }
+      },
+      "capture": {
+        "orderId": "data.id"
+      }
+    },
+    {
+      "name": "Read created order",
+      "method": "GET",
+      "path": "/orders/{{orderId}}",
+      "expect": {
+        "status": 200,
+        "json": {
+          "customerId": "{{customerId}}"
+        }
+      }
+    }
+  ]
+}
